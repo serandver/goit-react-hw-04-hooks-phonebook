@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const Form = props => {
+export default function Form({ onSubmit }) {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -19,7 +19,7 @@ const Form = props => {
 
   const handleSubmit = event => {
     event.preventDefault();
-    props.onSubmit(name, number);
+    onSubmit(name, number);
     reset();
   };
 
@@ -57,10 +57,8 @@ const Form = props => {
       </label>
     </form>
   );
-};
+}
 
 Form.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
-
-export default Form;

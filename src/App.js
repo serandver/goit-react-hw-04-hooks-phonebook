@@ -1,26 +1,15 @@
 import './App.css';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Form from './components/Form/Form';
 import { v4 as uuidv4 } from 'uuid';
 import Contact from './Contact';
 import ContactList from './components/ContactList/ContactList';
 import Filter from './components/Filter/Filter';
+import initContacts from './resources/initContacts.json';
 
 export default function App() {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState([...initContacts]);
   const [filter, setFilter] = useState('');
-
-  useEffect(() => {
-    const contactsString = localStorage.getItem('contacts');
-    const contacts = JSON.parse(contactsString);
-    if (contacts) {
-      setContacts(contacts);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-  }, [contacts]);
 
   const handleAddContact = (name, number) => {
     const id = uuidv4();
@@ -33,7 +22,7 @@ export default function App() {
   };
 
   const handleDeleteContact = idContact => {
-    setContacts(...contacts.filter(contact => contact.id !== idContact));
+    setContacts(contacts.filter(contact => contact.id !== idContact));
   };
 
   const changeFilter = event => {
@@ -52,18 +41,17 @@ export default function App() {
   };
 
   const filteredContacts = getFilteredContacts();
-
   return (
     <>
       <h2>Phonebook</h2>
-      <Form onSubmit={handleAddContact()} />
+      <Form onSubmit={handleAddContact} />
       {filteredContacts.length > 0 && (
         <div>
           <h2>Contacts</h2>
           <Filter value={filter} onChange={changeFilter} />
           <ContactList
             contacts={filteredContacts}
-            onDeleteContact={handleDeleteContact()}
+            onDeleteContact={handleDeleteContact}
           />
         </div>
       )}
